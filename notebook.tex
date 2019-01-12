@@ -281,28 +281,19 @@
 
     
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}9}]:} \PY{k+kn}{import} \PY{n+nn}{cv2}
-        \PY{k+kn}{from} \PY{n+nn}{utils} \PY{k}{import} \PY{n}{scan}\PY{p}{,} \PY{n}{showarray}\PY{p}{,} \PY{n}{segment\PYZus{}by\PYZus{}color\PYZus{}kmeans}
-        \PY{k+kn}{from} \PY{n+nn}{PIL} \PY{k}{import} \PY{n}{Image}
-        \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
-        \PY{o}{\PYZpc{}}\PY{k}{matplotlib} inline
+{\color{incolor}In [{\color{incolor}38}]:} \PY{k+kn}{import} \PY{n+nn}{cv2}
+         \PY{k+kn}{from} \PY{n+nn}{utils} \PY{k}{import} \PY{n}{scan}\PY{p}{,} \PY{n}{showarray}\PY{p}{,} \PY{n}{segment\PYZus{}by\PYZus{}color\PYZus{}kmeans}
+         \PY{k+kn}{from} \PY{n+nn}{PIL} \PY{k}{import} \PY{n}{Image}
+         \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+         \PY{o}{\PYZpc{}}\PY{k}{matplotlib} inline
 \end{Verbatim}
 
 
+    Reading the original Image
+
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}10}]:} \PY{n}{image} \PY{o}{=} \PY{n}{cv2}\PY{o}{.}\PY{n}{imread}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{images/500.jpg}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}39}]:} \PY{n}{image} \PY{o}{=} \PY{n}{cv2}\PY{o}{.}\PY{n}{imread}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{images/500.jpg}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
          \PY{n}{showarray}\PY{p}{(}\PY{n}{image}\PY{p}{)}
-\end{Verbatim}
-
-
-    \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_1_0.jpeg}
-    \end{center}
-    { \hspace*{\fill} \\}
-    
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}11}]:} \PY{n}{img} \PY{o}{=} \PY{n}{scan}\PY{p}{(}\PY{n}{image}\PY{p}{)}
-         \PY{n}{showarray}\PY{p}{(}\PY{n}{img}\PY{p}{)}
 \end{Verbatim}
 
 
@@ -311,13 +302,81 @@
     \end{center}
     { \hspace*{\fill} \\}
     
+    The bill is segmented out and the background is removed
+
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}12}]:} \PY{n}{med}\PY{p}{,} \PY{n}{pal}\PY{p}{,} \PY{n}{dom} \PY{o}{=} \PY{n}{segment\PYZus{}by\PYZus{}color\PYZus{}kmeans}\PY{p}{(}\PY{n}{img}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}40}]:} \PY{n}{img}\PY{p}{,} \PY{n}{warped}\PY{p}{,} \PY{n}{blur}\PY{p}{,} \PY{n}{edged} \PY{o}{=} \PY{n}{scan}\PY{p}{(}\PY{n}{image}\PY{p}{)}
+         \PY{n}{showarray}\PY{p}{(}\PY{n}{img}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_4_0.jpeg}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    the image is blurred before edge detection
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}41}]:} \PY{n}{showarray}\PY{p}{(}\PY{n}{blur}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_6_0.jpeg}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    The detected edges using Canny edge detector
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}42}]:} \PY{n}{showarray}\PY{p}{(}\PY{n}{edged}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_8_0.jpeg}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    The hough lines are drawn and segmented to find the intersection points
+(corners)
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}43}]:} \PY{n}{showarray}\PY{p}{(}\PY{n}{warped}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_10_0.jpeg}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \hypertarget{finding-the-value-of-the-denomination}{%
+\section{Finding the value of the
+denomination}\label{finding-the-value-of-the-denomination}}
+
+The dominant color using K means and the median color is extracted
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}44}]:} \PY{n}{med}\PY{p}{,} \PY{n}{pal}\PY{p}{,} \PY{n}{dom} \PY{o}{=} \PY{n}{segment\PYZus{}by\PYZus{}color\PYZus{}kmeans}\PY{p}{(}\PY{n}{img}\PY{p}{)}
 \end{Verbatim}
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}13}]:} \PY{k+kn}{import} \PY{n+nn}{pickle}
+{\color{incolor}In [{\color{incolor}45}]:} \PY{n}{showarray}\PY{p}{(}\PY{n}{dom}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_13_0.jpeg}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    The median color of each bill has been stored for comparison
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}46}]:} \PY{k+kn}{import} \PY{n+nn}{pickle}
          \PY{k}{with} \PY{n+nb}{open}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{codebook.p}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{rb}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{k}{as} \PY{n}{fp}\PY{p}{:}
              \PY{n}{data} \PY{o}{=} \PY{n}{pickle}\PY{o}{.}\PY{n}{load}\PY{p}{(}\PY{n}{fp}\PY{p}{)}
              
@@ -325,8 +384,11 @@
 \end{Verbatim}
 
 
+    The euclidean distance of each color is found, the label from the color
+with the least distance is assigned
+
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}14}]:} \PY{n}{value} \PY{o}{=} \PY{n+nb}{min}\PY{p}{(}\PY{n}{dist}\PY{p}{,} \PY{n}{key}\PY{o}{=}\PY{n}{dist}\PY{o}{.}\PY{n}{get}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}47}]:} \PY{n}{value} \PY{o}{=} \PY{n+nb}{min}\PY{p}{(}\PY{n}{dist}\PY{p}{,} \PY{n}{key}\PY{o}{=}\PY{n}{dist}\PY{o}{.}\PY{n}{get}\PY{p}{)}
          \PY{n+nb}{print}\PY{p}{(}\PY{n}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Value is }\PY{l+s+si}{\PYZob{}value\PYZcb{}}\PY{l+s+s2}{Rs}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
 \end{Verbatim}
 
@@ -336,8 +398,13 @@ Value is 500Rs
 
     \end{Verbatim}
 
+    \hypertarget{verifying-the-usability}{%
+\section{Verifying the usability}\label{verifying-the-usability}}
+
+The Serial Numbers are extracted to verify usability
+
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}15}]:} \PY{n}{h}\PY{p}{,}\PY{n}{w}\PY{p}{,}\PY{n}{c} \PY{o}{=} \PY{n}{img}\PY{o}{.}\PY{n}{shape}
+{\color{incolor}In [{\color{incolor}48}]:} \PY{n}{h}\PY{p}{,}\PY{n}{w}\PY{p}{,}\PY{n}{c} \PY{o}{=} \PY{n}{img}\PY{o}{.}\PY{n}{shape}
          \PY{n+nb}{print}\PY{p}{(}\PY{n}{h}\PY{p}{,}\PY{n}{w}\PY{p}{,}\PY{n}{c}\PY{p}{)}
          
          \PY{n}{num\PYZus{}w}\PY{o}{=}\PY{p}{(}\PY{n+nb}{int}\PY{p}{)}\PY{p}{(}\PY{n}{w}\PY{o}{/}\PY{l+m+mf}{3.2}\PY{p}{)}
@@ -359,12 +426,12 @@ Value is 500Rs
     \end{Verbatim}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_6_1.jpeg}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_19_1.jpeg}
     \end{center}
     { \hspace*{\fill} \\}
     
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}16}]:} \PY{k+kn}{import} \PY{n+nn}{pytesseract}
+{\color{incolor}In [{\color{incolor}49}]:} \PY{k+kn}{import} \PY{n+nn}{pytesseract}
          \PY{k+kn}{from} \PY{n+nn}{PIL} \PY{k}{import} \PY{n}{Image}
          \PY{n}{pytesseract}\PY{o}{.}\PY{n}{pytesseract}\PY{o}{.}\PY{n}{tesseract\PYZus{}cmd} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{C:/Program Files (x86)/Tesseract\PYZhy{}OCR/tesseract.exe}\PY{l+s+s1}{\PYZsq{}}
          \PY{n}{tessdata\PYZus{}dir\PYZus{}config} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}\PYZhy{}tessdata\PYZhy{}dir }\PY{l+s+s1}{\PYZdq{}}\PY{l+s+s1}{C:}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{Program Files (x86)}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{Tesseract\PYZhy{}OCR}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{tessdata}\PY{l+s+s1}{\PYZdq{}}\PY{l+s+s1}{\PYZsq{}}
@@ -372,15 +439,7 @@ Value is 500Rs
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}17}]:} \PY{c+c1}{\PYZsh{} imcv = cv2.imread(\PYZsq{}ocrtest.png\PYZsq{})}
-         \PY{c+c1}{\PYZsh{} height, width, depth = img.shape}
-         \PY{c+c1}{\PYZsh{} blur = cv2.bilateralFilter(image,9,150,150)}
-         \PY{c+c1}{\PYZsh{} img = Image.fromarray(img)}
-         \PY{n+nb}{print}\PY{p}{(}\PY{n}{pytesseract}\PY{o}{.}\PY{n}{image\PYZus{}to\PYZus{}string}\PY{p}{(}\PY{n}{Image}\PY{o}{.}\PY{n}{fromarray}\PY{p}{(}\PY{n}{topbi}\PY{p}{)}\PY{p}{,} \PY{n}{config}\PY{o}{=}\PY{n}{tessdata\PYZus{}dir\PYZus{}config}\PY{p}{)}\PY{p}{)}
-         \PY{c+c1}{\PYZsh{} txt = tess.image\PYZus{}to\PYZus{}string(img)}
-         \PY{c+c1}{\PYZsh{} text = tess.get\PYZus{}text()}
-         
-         \PY{c+c1}{\PYZsh{} print(text.strip())}
+{\color{incolor}In [{\color{incolor}50}]:} \PY{n+nb}{print}\PY{p}{(}\PY{n}{pytesseract}\PY{o}{.}\PY{n}{image\PYZus{}to\PYZus{}string}\PY{p}{(}\PY{n}{Image}\PY{o}{.}\PY{n}{fromarray}\PY{p}{(}\PY{n}{topbi}\PY{p}{)}\PY{p}{,} \PY{n}{config}\PY{o}{=}\PY{n}{tessdata\PYZus{}dir\PYZus{}config}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
 
 
@@ -390,7 +449,7 @@ EQ3002149
     \end{Verbatim}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}18}]:} \PY{n}{bot\PYZus{}roi} \PY{o}{=} \PY{n}{img}\PY{p}{[}\PY{n}{h}\PY{o}{\PYZhy{}}\PY{p}{(}\PY{n}{num\PYZus{}h}\PY{o}{\PYZhy{}}\PY{l+m+mi}{20}\PY{p}{)}\PY{p}{:}\PY{n}{h}\PY{p}{,}\PY{l+m+mi}{0}\PY{o}{+}\PY{l+m+mi}{100}\PY{p}{:}\PY{n}{num\PYZus{}w}\PY{o}{\PYZhy{}}\PY{l+m+mi}{150}\PY{p}{,}\PY{p}{:}\PY{p}{]}
+{\color{incolor}In [{\color{incolor}51}]:} \PY{n}{bot\PYZus{}roi} \PY{o}{=} \PY{n}{img}\PY{p}{[}\PY{n}{h}\PY{o}{\PYZhy{}}\PY{p}{(}\PY{n}{num\PYZus{}h}\PY{o}{\PYZhy{}}\PY{l+m+mi}{20}\PY{p}{)}\PY{p}{:}\PY{n}{h}\PY{p}{,}\PY{l+m+mi}{0}\PY{o}{+}\PY{l+m+mi}{100}\PY{p}{:}\PY{n}{num\PYZus{}w}\PY{o}{\PYZhy{}}\PY{l+m+mi}{150}\PY{p}{,}\PY{p}{:}\PY{p}{]}
          \PY{n}{botblur\PYZus{}roi} \PY{o}{=} \PY{n}{cv2}\PY{o}{.}\PY{n}{bilateralFilter}\PY{p}{(}\PY{n}{bot\PYZus{}roi}\PY{p}{,}\PY{l+m+mi}{9}\PY{p}{,}\PY{l+m+mi}{150}\PY{p}{,}\PY{l+m+mi}{150}\PY{p}{)}
          \PY{n}{botgray} \PY{o}{=} \PY{n}{cv2}\PY{o}{.}\PY{n}{cvtColor}\PY{p}{(}\PY{n}{botblur\PYZus{}roi}\PY{p}{,} \PY{n}{cv2}\PY{o}{.}\PY{n}{COLOR\PYZus{}BGR2GRAY}\PY{p}{)}
          \PY{n}{botbi} \PY{o}{=} \PY{n}{cv2}\PY{o}{.}\PY{n}{threshold}\PY{p}{(}\PY{n}{botgray}\PY{p}{,}\PY{l+m+mi}{100}\PY{p}{,}\PY{l+m+mi}{255}\PY{p}{,}\PY{n}{cv2}\PY{o}{.}\PY{n}{THRESH\PYZus{}BINARY}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}
@@ -399,12 +458,12 @@ EQ3002149
 
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_9_0.jpeg}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_22_0.jpeg}
     \end{center}
     { \hspace*{\fill} \\}
     
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}19}]:} \PY{n+nb}{print}\PY{p}{(}\PY{n}{pytesseract}\PY{o}{.}\PY{n}{image\PYZus{}to\PYZus{}string}\PY{p}{(}\PY{n}{Image}\PY{o}{.}\PY{n}{fromarray}\PY{p}{(}\PY{n}{botbi}\PY{p}{)}\PY{p}{,} \PY{n}{config}\PY{o}{=}\PY{n}{tessdata\PYZus{}dir\PYZus{}config}\PY{p}{)}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}52}]:} \PY{n+nb}{print}\PY{p}{(}\PY{n}{pytesseract}\PY{o}{.}\PY{n}{image\PYZus{}to\PYZus{}string}\PY{p}{(}\PY{n}{Image}\PY{o}{.}\PY{n}{fromarray}\PY{p}{(}\PY{n}{botbi}\PY{p}{)}\PY{p}{,} \PY{n}{config}\PY{o}{=}\PY{n}{tessdata\PYZus{}dir\PYZus{}config}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
 
 
@@ -413,14 +472,18 @@ EQ3002149
 
     \end{Verbatim}
 
-    \hypertarget{training-the-classifier}{%
-\section{Training the Classifier}\label{training-the-classifier}}
+    \hypertarget{training-the-classifiers-to-identify-counterfeit-bills}{%
+\section{Training the classifiers to identify counterfeit
+bills}\label{training-the-classifiers-to-identify-counterfeit-bills}}
+
+    \hypertarget{uv-light-classifier}{%
+\section{UV light classifier}\label{uv-light-classifier}}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}99}]:} \PY{k+kn}{import} \PY{n+nn}{cv2}
+{\color{incolor}In [{\color{incolor}53}]:} \PY{k+kn}{import} \PY{n+nn}{cv2}
          \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
          
-         \PY{n}{img} \PY{o}{=} \PY{n}{cv2}\PY{o}{.}\PY{n}{imread}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Photos/train\PYZus{}data/genuine/IMG\PYZus{}20190106\PYZus{}170509.jpg}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{img} \PY{o}{=} \PY{n}{cv2}\PY{o}{.}\PY{n}{imread}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{UV\PYZus{}dataset/train\PYZus{}data/genuine/IMG\PYZus{}20190106\PYZus{}170509.jpg}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
          \PY{n}{gray}\PY{o}{=} \PY{n}{cv2}\PY{o}{.}\PY{n}{cvtColor}\PY{p}{(}\PY{n}{img}\PY{p}{,}\PY{n}{cv2}\PY{o}{.}\PY{n}{COLOR\PYZus{}RGB2GRAY}\PY{p}{)}
          
          \PY{n}{sift} \PY{o}{=} \PY{n}{cv2}\PY{o}{.}\PY{n}{xfeatures2d}\PY{o}{.}\PY{n}{SIFT\PYZus{}create}\PY{p}{(}\PY{p}{)}
@@ -433,233 +496,337 @@ EQ3002149
 
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_12_0.jpeg}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_26_0.jpeg}
     \end{center}
     { \hspace*{\fill} \\}
     
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}168}]:} \PY{k+kn}{import} \PY{n+nn}{os}
-          \PY{k+kn}{from} \PY{n+nn}{scipy}\PY{n+nn}{.}\PY{n+nn}{cluster}\PY{n+nn}{.}\PY{n+nn}{vq} \PY{k}{import} \PY{n}{kmeans}\PY{p}{,}\PY{n}{vq}
-          \PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{preprocessing} \PY{k}{import} \PY{n}{StandardScaler}
-          \PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{svm} \PY{k}{import} \PY{n}{SVC}
-          \PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{externals} \PY{k}{import} \PY{n}{joblib}
-          
-          \PY{k}{def} \PY{n+nf}{imlist}\PY{p}{(}\PY{n}{path}\PY{p}{)}\PY{p}{:}
-              \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
-          \PY{l+s+sd}{    The function imlist returns all the names of the files in }
-          \PY{l+s+sd}{    the directory path supplied as argument to the function.}
-          \PY{l+s+sd}{    \PYZdq{}\PYZdq{}\PYZdq{}}
-              \PY{k}{return} \PY{p}{[}\PY{n}{os}\PY{o}{.}\PY{n}{path}\PY{o}{.}\PY{n}{join}\PY{p}{(}\PY{n}{path}\PY{p}{,} \PY{n}{f}\PY{p}{)} \PY{k}{for} \PY{n}{f} \PY{o+ow}{in} \PY{n}{os}\PY{o}{.}\PY{n}{listdir}\PY{p}{(}\PY{n}{path}\PY{p}{)}\PY{p}{]}
+{\color{incolor}In [{\color{incolor}54}]:} \PY{k+kn}{import} \PY{n+nn}{os}
+         \PY{k+kn}{from} \PY{n+nn}{scipy}\PY{n+nn}{.}\PY{n+nn}{cluster}\PY{n+nn}{.}\PY{n+nn}{vq} \PY{k}{import} \PY{n}{kmeans}\PY{p}{,}\PY{n}{vq}
+         \PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{preprocessing} \PY{k}{import} \PY{n}{StandardScaler}
+         \PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{svm} \PY{k}{import} \PY{n}{SVC}
+         \PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{externals} \PY{k}{import} \PY{n}{joblib}
+         
+         \PY{k}{def} \PY{n+nf}{imlist}\PY{p}{(}\PY{n}{path}\PY{p}{)}\PY{p}{:}
+             \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+         \PY{l+s+sd}{    The function imlist returns all the names of the files in }
+         \PY{l+s+sd}{    the directory path supplied as argument to the function.}
+         \PY{l+s+sd}{    \PYZdq{}\PYZdq{}\PYZdq{}}
+             \PY{k}{return} \PY{p}{[}\PY{n}{os}\PY{o}{.}\PY{n}{path}\PY{o}{.}\PY{n}{join}\PY{p}{(}\PY{n}{path}\PY{p}{,} \PY{n}{f}\PY{p}{)} \PY{k}{for} \PY{n}{f} \PY{o+ow}{in} \PY{n}{os}\PY{o}{.}\PY{n}{listdir}\PY{p}{(}\PY{n}{path}\PY{p}{)}\PY{p}{]}
 \end{Verbatim}
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}169}]:} \PY{n}{train\PYZus{}path} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Photos/train\PYZus{}data}\PY{l+s+s2}{\PYZdq{}}
-          \PY{n}{training\PYZus{}names} \PY{o}{=} \PY{n}{os}\PY{o}{.}\PY{n}{listdir}\PY{p}{(}\PY{n}{train\PYZus{}path}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}55}]:} \PY{n}{train\PYZus{}path} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{UV\PYZus{}dataset/train\PYZus{}data}\PY{l+s+s2}{\PYZdq{}}
+         \PY{n}{training\PYZus{}names} \PY{o}{=} \PY{n}{os}\PY{o}{.}\PY{n}{listdir}\PY{p}{(}\PY{n}{train\PYZus{}path}\PY{p}{)}
 \end{Verbatim}
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}170}]:} \PY{n}{image\PYZus{}paths} \PY{o}{=} \PY{p}{[}\PY{p}{]}
-          \PY{n}{image\PYZus{}classes} \PY{o}{=} \PY{p}{[}\PY{p}{]}
-          \PY{n}{class\PYZus{}id} \PY{o}{=} \PY{l+m+mi}{0}
-          \PY{k}{for} \PY{n}{training\PYZus{}name} \PY{o+ow}{in} \PY{n}{training\PYZus{}names}\PY{p}{:}
-              \PY{n+nb}{dir} \PY{o}{=} \PY{n}{os}\PY{o}{.}\PY{n}{path}\PY{o}{.}\PY{n}{join}\PY{p}{(}\PY{n}{train\PYZus{}path}\PY{p}{,} \PY{n}{training\PYZus{}name}\PY{p}{)}
-              \PY{n}{class\PYZus{}path} \PY{o}{=} \PY{n}{imlist}\PY{p}{(}\PY{n+nb}{dir}\PY{p}{)}
-              \PY{n}{image\PYZus{}paths}\PY{o}{+}\PY{o}{=}\PY{n}{class\PYZus{}path}
-              \PY{n}{image\PYZus{}classes}\PY{o}{+}\PY{o}{=}\PY{p}{[}\PY{n}{class\PYZus{}id}\PY{p}{]}\PY{o}{*}\PY{n+nb}{len}\PY{p}{(}\PY{n}{class\PYZus{}path}\PY{p}{)}
-              \PY{n}{class\PYZus{}id}\PY{o}{+}\PY{o}{=}\PY{l+m+mi}{1}
+{\color{incolor}In [{\color{incolor}56}]:} \PY{n}{image\PYZus{}paths} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+         \PY{n}{image\PYZus{}classes} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+         \PY{n}{class\PYZus{}id} \PY{o}{=} \PY{l+m+mi}{0}
+         \PY{k}{for} \PY{n}{training\PYZus{}name} \PY{o+ow}{in} \PY{n}{training\PYZus{}names}\PY{p}{:}
+             \PY{n+nb}{dir} \PY{o}{=} \PY{n}{os}\PY{o}{.}\PY{n}{path}\PY{o}{.}\PY{n}{join}\PY{p}{(}\PY{n}{train\PYZus{}path}\PY{p}{,} \PY{n}{training\PYZus{}name}\PY{p}{)}
+             \PY{n}{class\PYZus{}path} \PY{o}{=} \PY{n}{imlist}\PY{p}{(}\PY{n+nb}{dir}\PY{p}{)}
+             \PY{n}{image\PYZus{}paths}\PY{o}{+}\PY{o}{=}\PY{n}{class\PYZus{}path}
+             \PY{n}{image\PYZus{}classes}\PY{o}{+}\PY{o}{=}\PY{p}{[}\PY{n}{class\PYZus{}id}\PY{p}{]}\PY{o}{*}\PY{n+nb}{len}\PY{p}{(}\PY{n}{class\PYZus{}path}\PY{p}{)}
+             \PY{n}{class\PYZus{}id}\PY{o}{+}\PY{o}{=}\PY{l+m+mi}{1}
+\end{Verbatim}
+
+
+    Creating and appending sift features into a single matrix
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}57}]:} \PY{n}{sift} \PY{o}{=} \PY{n}{cv2}\PY{o}{.}\PY{n}{xfeatures2d}\PY{o}{.}\PY{n}{SIFT\PYZus{}create}\PY{p}{(}\PY{p}{)}
+         
+         \PY{n}{features} \PY{o}{=} \PY{p}{[}\PY{p}{]}    
+         \PY{k}{for} \PY{n}{image\PYZus{}path} \PY{o+ow}{in} \PY{n}{image\PYZus{}paths}\PY{p}{:}
+             \PY{n}{img} \PY{o}{=} \PY{n}{cv2}\PY{o}{.}\PY{n}{imread}\PY{p}{(}\PY{n}{image\PYZus{}path}\PY{p}{)}
+             \PY{n}{gray}\PY{o}{=} \PY{n}{cv2}\PY{o}{.}\PY{n}{cvtColor}\PY{p}{(}\PY{n}{img}\PY{p}{,}\PY{n}{cv2}\PY{o}{.}\PY{n}{COLOR\PYZus{}RGB2GRAY}\PY{p}{)}
+             \PY{n}{kp}\PY{p}{,} \PY{n}{des} \PY{o}{=} \PY{n}{sift}\PY{o}{.}\PY{n}{detectAndCompute}\PY{p}{(}\PY{n}{gray}\PY{p}{,} \PY{k+kc}{None}\PY{p}{)}
+             \PY{n}{features}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{p}{(}\PY{n}{image\PYZus{}path}\PY{p}{,} \PY{n}{des}\PY{p}{)}\PY{p}{)} 
 \end{Verbatim}
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}171}]:} \PY{n}{sift} \PY{o}{=} \PY{n}{cv2}\PY{o}{.}\PY{n}{xfeatures2d}\PY{o}{.}\PY{n}{SIFT\PYZus{}create}\PY{p}{(}\PY{p}{)}
-          
-          \PY{n}{features} \PY{o}{=} \PY{p}{[}\PY{p}{]}    
-          \PY{k}{for} \PY{n}{image\PYZus{}path} \PY{o+ow}{in} \PY{n}{image\PYZus{}paths}\PY{p}{:}
-              \PY{n}{img} \PY{o}{=} \PY{n}{cv2}\PY{o}{.}\PY{n}{imread}\PY{p}{(}\PY{n}{image\PYZus{}path}\PY{p}{)}
-              \PY{n}{gray}\PY{o}{=} \PY{n}{cv2}\PY{o}{.}\PY{n}{cvtColor}\PY{p}{(}\PY{n}{img}\PY{p}{,}\PY{n}{cv2}\PY{o}{.}\PY{n}{COLOR\PYZus{}RGB2GRAY}\PY{p}{)}
-              \PY{n}{kp}\PY{p}{,} \PY{n}{des} \PY{o}{=} \PY{n}{sift}\PY{o}{.}\PY{n}{detectAndCompute}\PY{p}{(}\PY{n}{gray}\PY{p}{,} \PY{k+kc}{None}\PY{p}{)}
-              \PY{n}{features}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{p}{(}\PY{n}{image\PYZus{}path}\PY{p}{,} \PY{n}{des}\PY{p}{)}\PY{p}{)} 
+{\color{incolor}In [{\color{incolor}58}]:} \PY{n}{descriptors} \PY{o}{=} \PY{n}{features}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}
+         \PY{k}{for} \PY{n}{image\PYZus{}path}\PY{p}{,} \PY{n}{descriptor} \PY{o+ow}{in} \PY{n}{features}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{p}{]}\PY{p}{:}
+             \PY{n}{descriptors} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{vstack}\PY{p}{(}\PY{p}{(}\PY{n}{descriptors}\PY{p}{,} \PY{n}{descriptor}\PY{p}{)}\PY{p}{)} 
 \end{Verbatim}
 
 
+    using kmeans clustering to extract the vocabulary
+
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}172}]:} \PY{n}{descriptors} \PY{o}{=} \PY{n}{features}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}
-          \PY{k}{for} \PY{n}{image\PYZus{}path}\PY{p}{,} \PY{n}{descriptor} \PY{o+ow}{in} \PY{n}{features}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{p}{]}\PY{p}{:}
-              \PY{n}{descriptors} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{vstack}\PY{p}{(}\PY{p}{(}\PY{n}{descriptors}\PY{p}{,} \PY{n}{descriptor}\PY{p}{)}\PY{p}{)} 
+{\color{incolor}In [{\color{incolor}59}]:} \PY{n}{k} \PY{o}{=} \PY{l+m+mi}{30}
+         \PY{n}{voc}\PY{p}{,} \PY{n}{variance} \PY{o}{=} \PY{n}{kmeans}\PY{p}{(}\PY{n}{descriptors}\PY{p}{,} \PY{n}{k}\PY{p}{)} 
 \end{Verbatim}
 
 
+    Creating the histogram
+
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}173}]:} \PY{n}{descriptors}\PY{o}{.}\PY{n}{shape}
+{\color{incolor}In [{\color{incolor}60}]:} \PY{n}{im\PYZus{}features} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{image\PYZus{}paths}\PY{p}{)}\PY{p}{,} \PY{n}{k}\PY{p}{)}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{float32}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{image\PYZus{}paths}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+             \PY{n}{words}\PY{p}{,} \PY{n}{distance} \PY{o}{=} \PY{n}{vq}\PY{p}{(}\PY{n}{features}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,}\PY{n}{voc}\PY{p}{)}
+             \PY{k}{for} \PY{n}{w} \PY{o+ow}{in} \PY{n}{words}\PY{p}{:}
+                 \PY{n}{im\PYZus{}features}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{[}\PY{n}{w}\PY{p}{]} \PY{o}{+}\PY{o}{=} \PY{l+m+mi}{1}
+\end{Verbatim}
+
+
+    Scaling the features
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}61}]:} \PY{n}{stdSlr} \PY{o}{=} \PY{n}{StandardScaler}\PY{p}{(}\PY{p}{)}
+         \PY{n}{im\PYZus{}features} \PY{o}{=} \PY{n}{stdSlr}\PY{o}{.}\PY{n}{fit\PYZus{}transform}\PY{p}{(}\PY{n}{im\PYZus{}features}\PY{p}{)}
+\end{Verbatim}
+
+
+    Creating and training the SVM classifier
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}62}]:} \PY{n}{clf} \PY{o}{=} \PY{n}{SVC}\PY{p}{(}\PY{p}{)}
+         \PY{n}{clf}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{im\PYZus{}features}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{n}{image\PYZus{}classes}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
 
 
 \begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}173}]:} (253053, 128)
+{\color{outcolor}Out[{\color{outcolor}62}]:} SVC(C=1.0, cache\_size=200, class\_weight=None, coef0=0.0,
+           decision\_function\_shape='ovr', degree=3, gamma='auto\_deprecated',
+           kernel='rbf', max\_iter=-1, probability=False, random\_state=None,
+           shrinking=True, tol=0.001, verbose=False)
 \end{Verbatim}
             
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}174}]:} \PY{n}{k} \PY{o}{=} \PY{l+m+mi}{30}
-          \PY{n}{voc}\PY{p}{,} \PY{n}{variance} \PY{o}{=} \PY{n}{kmeans}\PY{p}{(}\PY{n}{descriptors}\PY{p}{,} \PY{n}{k}\PY{p}{)} 
-\end{Verbatim}
-
+    Storing the trained model, along with the labels and the scaler
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}175}]:} \PY{n+nb}{len}\PY{p}{(}\PY{n}{features}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}63}]:} \PY{n}{joblib}\PY{o}{.}\PY{n}{dump}\PY{p}{(}\PY{p}{(}\PY{n}{clf}\PY{p}{,} \PY{n}{training\PYZus{}names}\PY{p}{,} \PY{n}{stdSlr}\PY{p}{,} \PY{n}{k}\PY{p}{,} \PY{n}{voc}\PY{p}{)}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bof.p}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{compress}\PY{o}{=}\PY{l+m+mi}{3}\PY{p}{)} 
 \end{Verbatim}
 
 
 \begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}175}]:} 25
+{\color{outcolor}Out[{\color{outcolor}63}]:} ['bof.p']
 \end{Verbatim}
             
+    \hypertarget{watermark-classifier}{%
+\section{Watermark classifier}\label{watermark-classifier}}
+
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}176}]:} \PY{n}{im\PYZus{}features} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{image\PYZus{}paths}\PY{p}{)}\PY{p}{,} \PY{n}{k}\PY{p}{)}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{float32}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-          \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{image\PYZus{}paths}\PY{p}{)}\PY{p}{)}\PY{p}{:}
-              \PY{n}{words}\PY{p}{,} \PY{n}{distance} \PY{o}{=} \PY{n}{vq}\PY{p}{(}\PY{n}{features}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,}\PY{n}{voc}\PY{p}{)}
-              \PY{k}{for} \PY{n}{w} \PY{o+ow}{in} \PY{n}{words}\PY{p}{:}
-                  \PY{n}{im\PYZus{}features}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{[}\PY{n}{w}\PY{p}{]} \PY{o}{+}\PY{o}{=} \PY{l+m+mi}{1}
+{\color{incolor}In [{\color{incolor}64}]:} \PY{n}{train\PYZus{}path} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Notes Watermark}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s2}{Notes Watermark}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s2}{dataset}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s2}{train}\PY{l+s+s2}{\PYZdq{}}
+         \PY{n}{training\PYZus{}names} \PY{o}{=} \PY{n}{os}\PY{o}{.}\PY{n}{listdir}\PY{p}{(}\PY{n}{train\PYZus{}path}\PY{p}{)}
+         
+         \PY{n}{image\PYZus{}paths} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+         \PY{n}{image\PYZus{}classes} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+         \PY{n}{class\PYZus{}id} \PY{o}{=} \PY{l+m+mi}{0}
+         \PY{k}{for} \PY{n}{training\PYZus{}name} \PY{o+ow}{in} \PY{n}{training\PYZus{}names}\PY{p}{:}
+             \PY{n+nb}{dir} \PY{o}{=} \PY{n}{os}\PY{o}{.}\PY{n}{path}\PY{o}{.}\PY{n}{join}\PY{p}{(}\PY{n}{train\PYZus{}path}\PY{p}{,} \PY{n}{training\PYZus{}name}\PY{p}{)}
+             \PY{n}{class\PYZus{}path} \PY{o}{=} \PY{n}{imlist}\PY{p}{(}\PY{n+nb}{dir}\PY{p}{)}
+             \PY{n}{image\PYZus{}paths}\PY{o}{+}\PY{o}{=}\PY{n}{class\PYZus{}path}
+             \PY{n}{image\PYZus{}classes}\PY{o}{+}\PY{o}{=}\PY{p}{[}\PY{n}{class\PYZus{}id}\PY{p}{]}\PY{o}{*}\PY{n+nb}{len}\PY{p}{(}\PY{n}{class\PYZus{}path}\PY{p}{)}
+             \PY{n}{class\PYZus{}id}\PY{o}{+}\PY{o}{=}\PY{l+m+mi}{1}
 \end{Verbatim}
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}177}]:} \PY{n}{nbr\PYZus{}occurences} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{sum}\PY{p}{(} \PY{p}{(}\PY{n}{im\PYZus{}features} \PY{o}{\PYZgt{}} \PY{l+m+mi}{0}\PY{p}{)} \PY{o}{*} \PY{l+m+mi}{1}\PY{p}{,} \PY{n}{axis} \PY{o}{=} \PY{l+m+mi}{0}\PY{p}{)}
-          \PY{n}{idf} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{log}\PY{p}{(}\PY{p}{(}\PY{l+m+mf}{1.0}\PY{o}{*}\PY{n+nb}{len}\PY{p}{(}\PY{n}{image\PYZus{}paths}\PY{p}{)}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{)} \PY{o}{/} \PY{p}{(}\PY{l+m+mf}{1.0}\PY{o}{*}\PY{n}{nbr\PYZus{}occurences} \PY{o}{+} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{float32}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}65}]:} \PY{n}{sift} \PY{o}{=} \PY{n}{cv2}\PY{o}{.}\PY{n}{xfeatures2d}\PY{o}{.}\PY{n}{SIFT\PYZus{}create}\PY{p}{(}\PY{p}{)}
+         
+         \PY{n}{features} \PY{o}{=} \PY{p}{[}\PY{p}{]}    
+         \PY{k}{for} \PY{n}{image\PYZus{}path} \PY{o+ow}{in} \PY{n}{image\PYZus{}paths}\PY{p}{:}
+             \PY{n}{img} \PY{o}{=} \PY{n}{cv2}\PY{o}{.}\PY{n}{imread}\PY{p}{(}\PY{n}{image\PYZus{}path}\PY{p}{)}
+             \PY{n}{g}\PY{o}{=} \PY{n}{cv2}\PY{o}{.}\PY{n}{cvtColor}\PY{p}{(}\PY{n}{img}\PY{p}{,}\PY{n}{cv2}\PY{o}{.}\PY{n}{COLOR\PYZus{}RGB2GRAY}\PY{p}{)}
+             \PY{n}{h}\PY{p}{,}\PY{n}{w}\PY{p}{,}\PY{n}{c} \PY{o}{=} \PY{n}{img}\PY{o}{.}\PY{n}{shape}
+             \PY{n}{num\PYZus{}w}\PY{o}{=}\PY{p}{(}\PY{n+nb}{int}\PY{p}{)}\PY{p}{(}\PY{n}{w}\PY{o}{/}\PY{l+m+mi}{4}\PY{p}{)}
+             \PY{n}{num\PYZus{}h}\PY{o}{=}\PY{p}{(}\PY{n+nb}{int}\PY{p}{)}\PY{p}{(}\PY{n}{h}\PY{o}{/}\PY{l+m+mi}{5}\PY{p}{)}
+             
+             \PY{n}{g} \PY{o}{=} \PY{n}{g}\PY{p}{[}\PY{n}{num\PYZus{}h}\PY{p}{:}\PY{n}{h}\PY{o}{\PYZhy{}}\PY{n}{num\PYZus{}h}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{:}\PY{n}{num\PYZus{}w}\PY{p}{]}
+             \PY{n}{kp}\PY{p}{,} \PY{n}{des} \PY{o}{=} \PY{n}{sift}\PY{o}{.}\PY{n}{detectAndCompute}\PY{p}{(}\PY{n}{g}\PY{p}{,} \PY{k+kc}{None}\PY{p}{)}
+             \PY{n}{features}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{p}{(}\PY{n}{image\PYZus{}path}\PY{p}{,} \PY{n}{des}\PY{p}{)}\PY{p}{)}
+         \PY{n}{showarray}\PY{p}{(}\PY{n}{g}\PY{p}{)}
+         
+         \PY{n}{descriptors} \PY{o}{=} \PY{n}{features}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}
+         \PY{k}{for} \PY{n}{image\PYZus{}path}\PY{p}{,} \PY{n}{descriptor} \PY{o+ow}{in} \PY{n}{features}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{p}{]}\PY{p}{:}
+             \PY{n}{descriptors} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{vstack}\PY{p}{(}\PY{p}{(}\PY{n}{descriptors}\PY{p}{,} \PY{n}{descriptor}\PY{p}{)}\PY{p}{)}
+         
+         \PY{n}{k} \PY{o}{=} \PY{l+m+mi}{30}
+         \PY{n}{voc}\PY{p}{,} \PY{n}{variance} \PY{o}{=} \PY{n}{kmeans}\PY{p}{(}\PY{n}{descriptors}\PY{p}{,} \PY{n}{k}\PY{p}{)} 
+\end{Verbatim}
+
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_45_0.jpeg}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}66}]:} \PY{n}{im\PYZus{}features} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{image\PYZus{}paths}\PY{p}{)}\PY{p}{,} \PY{n}{k}\PY{p}{)}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{float32}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{image\PYZus{}paths}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+             \PY{n}{words}\PY{p}{,} \PY{n}{distance} \PY{o}{=} \PY{n}{vq}\PY{p}{(}\PY{n}{features}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,}\PY{n}{voc}\PY{p}{)}
+             \PY{k}{for} \PY{n}{w} \PY{o+ow}{in} \PY{n}{words}\PY{p}{:}
+                 \PY{n}{im\PYZus{}features}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{[}\PY{n}{w}\PY{p}{]} \PY{o}{+}\PY{o}{=} \PY{l+m+mi}{1}
 \end{Verbatim}
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}178}]:} \PY{n}{stdSlr} \PY{o}{=} \PY{n}{StandardScaler}\PY{p}{(}\PY{p}{)}
-          \PY{n}{im\PYZus{}features} \PY{o}{=} \PY{n}{stdSlr}\PY{o}{.}\PY{n}{fit\PYZus{}transform}\PY{p}{(}\PY{n}{im\PYZus{}features}\PY{p}{)}
-\end{Verbatim}
-
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}179}]:} \PY{n}{clf} \PY{o}{=} \PY{n}{SVC}\PY{p}{(}\PY{p}{)}
-          \PY{n}{clf}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{im\PYZus{}features}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{n}{image\PYZus{}classes}\PY{p}{)}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}67}]:} \PY{n}{stdSlr} \PY{o}{=} \PY{n}{StandardScaler}\PY{p}{(}\PY{p}{)}
+         \PY{n}{im\PYZus{}features} \PY{o}{=} \PY{n}{stdSlr}\PY{o}{.}\PY{n}{fit\PYZus{}transform}\PY{p}{(}\PY{n}{im\PYZus{}features}\PY{p}{)}
+         
+         \PY{n}{clf} \PY{o}{=} \PY{n}{SVC}\PY{p}{(}\PY{p}{)}
+         \PY{n}{clf}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{im\PYZus{}features}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{n}{image\PYZus{}classes}\PY{p}{)}\PY{p}{)}
+         
+         \PY{n}{joblib}\PY{o}{.}\PY{n}{dump}\PY{p}{(}\PY{p}{(}\PY{n}{clf}\PY{p}{,} \PY{n}{training\PYZus{}names}\PY{p}{,} \PY{n}{stdSlr}\PY{p}{,} \PY{n}{k}\PY{p}{,} \PY{n}{voc}\PY{p}{)}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bof\PYZus{}watermark.p}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{compress}\PY{o}{=}\PY{l+m+mi}{3}\PY{p}{)} 
 \end{Verbatim}
 
 
 \begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}179}]:} SVC(C=1.0, cache\_size=200, class\_weight=None, coef0=0.0,
-            decision\_function\_shape='ovr', degree=3, gamma='auto\_deprecated',
-            kernel='rbf', max\_iter=-1, probability=False, random\_state=None,
-            shrinking=True, tol=0.001, verbose=False)
-\end{Verbatim}
-            
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}180}]:} \PY{n}{joblib}\PY{o}{.}\PY{n}{dump}\PY{p}{(}\PY{p}{(}\PY{n}{clf}\PY{p}{,} \PY{n}{training\PYZus{}names}\PY{p}{,} \PY{n}{stdSlr}\PY{p}{,} \PY{n}{k}\PY{p}{,} \PY{n}{voc}\PY{p}{)}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bof.p}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{compress}\PY{o}{=}\PY{l+m+mi}{3}\PY{p}{)} 
-\end{Verbatim}
-
-
-\begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}180}]:} ['bof.p']
+{\color{outcolor}Out[{\color{outcolor}67}]:} ['bof\_watermark.p']
 \end{Verbatim}
             
     \hypertarget{testing}{%
 \section{Testing}\label{testing}}
 
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}181}]:} \PY{n}{clf}\PY{p}{,} \PY{n}{classes\PYZus{}names}\PY{p}{,} \PY{n}{stdSlr}\PY{p}{,} \PY{n}{k}\PY{p}{,} \PY{n}{voc} \PY{o}{=} \PY{n}{joblib}\PY{o}{.}\PY{n}{load}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bof.p}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-\end{Verbatim}
-
+    \hypertarget{uv-classifier-testing}{%
+\section{UV classifier testing}\label{uv-classifier-testing}}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}182}]:} \PY{c+c1}{\PYZsh{} Create feature extraction and keypoint detector objects}
-          \PY{n}{test\PYZus{}path} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Photos/test}\PY{l+s+s2}{\PYZdq{}}
-          \PY{n}{testing\PYZus{}names} \PY{o}{=} \PY{n}{os}\PY{o}{.}\PY{n}{listdir}\PY{p}{(}\PY{n}{test\PYZus{}path}\PY{p}{)}
-          \PY{n}{image\PYZus{}paths} \PY{o}{=} \PY{p}{[}\PY{p}{]}
-          
-          \PY{k}{for} \PY{n}{testing\PYZus{}name} \PY{o+ow}{in} \PY{n}{testing\PYZus{}names}\PY{p}{:}
-              \PY{n+nb}{dir} \PY{o}{=} \PY{n}{os}\PY{o}{.}\PY{n}{path}\PY{o}{.}\PY{n}{join}\PY{p}{(}\PY{n}{test\PYZus{}path}\PY{p}{,} \PY{n}{testing\PYZus{}name}\PY{p}{)}
-              \PY{n}{class\PYZus{}path} \PY{o}{=} \PY{n}{imlist}\PY{p}{(}\PY{n+nb}{dir}\PY{p}{)}
-              \PY{n}{image\PYZus{}paths}\PY{o}{+}\PY{o}{=}\PY{n}{class\PYZus{}path}
+{\color{incolor}In [{\color{incolor}68}]:} \PY{n}{clf}\PY{p}{,} \PY{n}{classes\PYZus{}names}\PY{p}{,} \PY{n}{stdSlr}\PY{p}{,} \PY{n}{k}\PY{p}{,} \PY{n}{voc} \PY{o}{=} \PY{n}{joblib}\PY{o}{.}\PY{n}{load}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bof.p}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
 \end{Verbatim}
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}188}]:} \PY{n}{image\PYZus{}paths}
-\end{Verbatim}
-
-
-\begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}188}]:} ['Photos/test\textbackslash{}\textbackslash{}Counterfeit\textbackslash{}\textbackslash{}IMG\_20190108\_142119.jpg',
-           'Photos/test\textbackslash{}\textbackslash{}genuine\textbackslash{}\textbackslash{}IMG\_20190106\_170447.jpg',
-           'Photos/test\textbackslash{}\textbackslash{}genuine\textbackslash{}\textbackslash{}IMG\_20190106\_170520.jpg']
-\end{Verbatim}
-            
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}183}]:} \PY{n}{s} \PY{o}{=} \PY{n}{cv2}\PY{o}{.}\PY{n}{xfeatures2d}\PY{o}{.}\PY{n}{SIFT\PYZus{}create}\PY{p}{(}\PY{p}{)}
-          
-          \PY{c+c1}{\PYZsh{} List where all the descriptors are stored}
-          \PY{n}{des\PYZus{}list} \PY{o}{=} \PY{p}{[}\PY{p}{]}
-          
-          \PY{k}{for} \PY{n}{image\PYZus{}path} \PY{o+ow}{in} \PY{n}{image\PYZus{}paths}\PY{p}{:}
-          \PY{c+c1}{\PYZsh{}     im = cv2.imread(image\PYZus{}path)}
-          \PY{c+c1}{\PYZsh{}     if im == None:}
-          \PY{c+c1}{\PYZsh{}         print(\PYZdq{}No such file \PYZob{}\PYZcb{}\PYZbs{}nCheck if the file exists\PYZdq{}.format(image\PYZus{}path))}
-          \PY{c+c1}{\PYZsh{}         exit()}
-              \PY{n}{im} \PY{o}{=} \PY{n}{cv2}\PY{o}{.}\PY{n}{imread}\PY{p}{(}\PY{n}{image\PYZus{}path}\PY{p}{)}
-              \PY{n}{gr}\PY{o}{=} \PY{n}{cv2}\PY{o}{.}\PY{n}{cvtColor}\PY{p}{(}\PY{n}{im}\PY{p}{,}\PY{n}{cv2}\PY{o}{.}\PY{n}{COLOR\PYZus{}RGB2GRAY}\PY{p}{)}
-              \PY{n}{kp}\PY{p}{,} \PY{n}{des} \PY{o}{=} \PY{n}{s}\PY{o}{.}\PY{n}{detectAndCompute}\PY{p}{(}\PY{n}{gr}\PY{p}{,} \PY{k+kc}{None}\PY{p}{)}
-              \PY{n}{des\PYZus{}list}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{p}{(}\PY{n}{image\PYZus{}path}\PY{p}{,} \PY{n}{des}\PY{p}{)}\PY{p}{)}   
-          
-          \PY{c+c1}{\PYZsh{} Stack all the descriptors vertically in a numpy array}
-          \PY{n}{descriptors} \PY{o}{=} \PY{n}{des\PYZus{}list}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}
-          \PY{k}{for} \PY{n}{image\PYZus{}path}\PY{p}{,} \PY{n}{descriptor} \PY{o+ow}{in} \PY{n}{des\PYZus{}list}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{:}\PY{p}{]}\PY{p}{:}
-              \PY{n}{descriptors} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{vstack}\PY{p}{(}\PY{p}{(}\PY{n}{descriptors}\PY{p}{,} \PY{n}{descriptor}\PY{p}{)}\PY{p}{)} 
-          
-          \PY{n}{descriptors}\PY{o}{.}\PY{n}{shape}
-\end{Verbatim}
-
-
-\begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}183}]:} (44908, 128)
-\end{Verbatim}
-            
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}184}]:} \PY{n}{test\PYZus{}features} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{image\PYZus{}paths}\PY{p}{)}\PY{p}{,} \PY{n}{k}\PY{p}{)}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{float32}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-          \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{image\PYZus{}paths}\PY{p}{)}\PY{p}{)}\PY{p}{:}
-              \PY{n}{words}\PY{p}{,} \PY{n}{distance} \PY{o}{=} \PY{n}{vq}\PY{p}{(}\PY{n}{des\PYZus{}list}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,}\PY{n}{voc}\PY{p}{)}
-              \PY{k}{for} \PY{n}{w} \PY{o+ow}{in} \PY{n}{words}\PY{p}{:}
-                  \PY{n}{test\PYZus{}features}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{[}\PY{n}{w}\PY{p}{]} \PY{o}{+}\PY{o}{=} \PY{l+m+mi}{1}
+{\color{incolor}In [{\color{incolor}69}]:} \PY{c+c1}{\PYZsh{} Create feature extraction and keypoint detector objects}
+         \PY{n}{test\PYZus{}path} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{UV\PYZus{}dataset/test}\PY{l+s+s2}{\PYZdq{}}
+         \PY{n}{testing\PYZus{}names} \PY{o}{=} \PY{n}{os}\PY{o}{.}\PY{n}{listdir}\PY{p}{(}\PY{n}{test\PYZus{}path}\PY{p}{)}
+         \PY{n}{image\PYZus{}paths} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+         \PY{n}{y\PYZus{}label} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+         
+         \PY{k}{for} \PY{n}{testing\PYZus{}name} \PY{o+ow}{in} \PY{n}{testing\PYZus{}names}\PY{p}{:}
+             \PY{n+nb}{dir} \PY{o}{=} \PY{n}{os}\PY{o}{.}\PY{n}{path}\PY{o}{.}\PY{n}{join}\PY{p}{(}\PY{n}{test\PYZus{}path}\PY{p}{,} \PY{n}{testing\PYZus{}name}\PY{p}{)}
+             \PY{n}{class\PYZus{}path} \PY{o}{=} \PY{n}{imlist}\PY{p}{(}\PY{n+nb}{dir}\PY{p}{)}
+             \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n}{class\PYZus{}path}\PY{p}{:}
+                 \PY{n}{y\PYZus{}label}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{testing\PYZus{}name}\PY{p}{)}
+             \PY{n}{image\PYZus{}paths}\PY{o}{+}\PY{o}{=}\PY{n}{class\PYZus{}path}
 \end{Verbatim}
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}185}]:} \PY{c+c1}{\PYZsh{} Perform Tf\PYZhy{}Idf vectorization}
-          \PY{n}{nbr\PYZus{}occurences} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{sum}\PY{p}{(} \PY{p}{(}\PY{n}{test\PYZus{}features} \PY{o}{\PYZgt{}} \PY{l+m+mi}{0}\PY{p}{)} \PY{o}{*} \PY{l+m+mi}{1}\PY{p}{,} \PY{n}{axis} \PY{o}{=} \PY{l+m+mi}{0}\PY{p}{)}
-          \PY{n}{idf} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{log}\PY{p}{(}\PY{p}{(}\PY{l+m+mf}{1.0}\PY{o}{*}\PY{n+nb}{len}\PY{p}{(}\PY{n}{image\PYZus{}paths}\PY{p}{)}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{)} \PY{o}{/} \PY{p}{(}\PY{l+m+mf}{1.0}\PY{o}{*}\PY{n}{nbr\PYZus{}occurences} \PY{o}{+} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{float32}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-          
-          \PY{c+c1}{\PYZsh{} Scale the features}
-          \PY{n}{test\PYZus{}features} \PY{o}{=} \PY{n}{stdSlr}\PY{o}{.}\PY{n}{transform}\PY{p}{(}\PY{n}{test\PYZus{}features}\PY{p}{)}
-          
-          \PY{c+c1}{\PYZsh{} Perform the predictions}
-          \PY{n}{predictions} \PY{o}{=}  \PY{p}{[}\PY{n}{classes\PYZus{}names}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n}{clf}\PY{o}{.}\PY{n}{predict}\PY{p}{(}\PY{n}{test\PYZus{}features}\PY{p}{)}\PY{p}{]}
-          
-          \PY{c+c1}{\PYZsh{} \PYZsh{} Visualize the results, if \PYZdq{}visualize\PYZdq{} flag set to true by the user}
-          \PY{c+c1}{\PYZsh{} if args[\PYZdq{}visualize\PYZdq{}]:}
-          \PY{c+c1}{\PYZsh{}     for image\PYZus{}path, prediction in zip(image\PYZus{}paths, predictions):}
-          \PY{c+c1}{\PYZsh{}         image = cv2.imread(image\PYZus{}path)}
-          \PY{c+c1}{\PYZsh{}         cv2.namedWindow(\PYZdq{}Image\PYZdq{}, cv2.WINDOW\PYZus{}NORMAL)}
-          \PY{c+c1}{\PYZsh{}         pt = (0, 3 * image.shape[0] // 4)}
-          \PY{c+c1}{\PYZsh{}         cv2.putText(image, prediction, pt ,cv2.FONT\PYZus{}HERSHEY\PYZus{}SCRIPT\PYZus{}COMPLEX, 2, [0, 255, 0], 2)}
-          \PY{c+c1}{\PYZsh{}         cv2.imshow(\PYZdq{}Image\PYZdq{}, image)}
-          \PY{c+c1}{\PYZsh{} cv2.waitKey(3000)}
+{\color{incolor}In [{\color{incolor}70}]:} \PY{n}{s} \PY{o}{=} \PY{n}{cv2}\PY{o}{.}\PY{n}{xfeatures2d}\PY{o}{.}\PY{n}{SIFT\PYZus{}create}\PY{p}{(}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} List where all the descriptors are stored}
+         \PY{n}{des\PYZus{}list} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+         
+         \PY{k}{for} \PY{n}{image\PYZus{}path} \PY{o+ow}{in} \PY{n}{image\PYZus{}paths}\PY{p}{:}
+             \PY{n}{im} \PY{o}{=} \PY{n}{cv2}\PY{o}{.}\PY{n}{imread}\PY{p}{(}\PY{n}{image\PYZus{}path}\PY{p}{)}
+             \PY{n}{gr}\PY{o}{=} \PY{n}{cv2}\PY{o}{.}\PY{n}{cvtColor}\PY{p}{(}\PY{n}{im}\PY{p}{,}\PY{n}{cv2}\PY{o}{.}\PY{n}{COLOR\PYZus{}RGB2GRAY}\PY{p}{)}
+             \PY{n}{kp}\PY{p}{,} \PY{n}{des} \PY{o}{=} \PY{n}{s}\PY{o}{.}\PY{n}{detectAndCompute}\PY{p}{(}\PY{n}{gr}\PY{p}{,} \PY{k+kc}{None}\PY{p}{)}
+             \PY{n}{des\PYZus{}list}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{p}{(}\PY{n}{image\PYZus{}path}\PY{p}{,} \PY{n}{des}\PY{p}{)}\PY{p}{)}   
+         
+         \PY{c+c1}{\PYZsh{} Stack all the descriptors vertically in a numpy array}
+         \PY{n}{descriptors} \PY{o}{=} \PY{n}{des\PYZus{}list}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}
+         \PY{k}{for} \PY{n}{image\PYZus{}path}\PY{p}{,} \PY{n}{descriptor} \PY{o+ow}{in} \PY{n}{des\PYZus{}list}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{:}\PY{p}{]}\PY{p}{:}
+             \PY{n}{descriptors} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{vstack}\PY{p}{(}\PY{p}{(}\PY{n}{descriptors}\PY{p}{,} \PY{n}{descriptor}\PY{p}{)}\PY{p}{)} 
 \end{Verbatim}
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}186}]:} \PY{n}{predictions}
+{\color{incolor}In [{\color{incolor}71}]:} \PY{n}{test\PYZus{}features} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{image\PYZus{}paths}\PY{p}{)}\PY{p}{,} \PY{n}{k}\PY{p}{)}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{float32}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{image\PYZus{}paths}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+             \PY{n}{words}\PY{p}{,} \PY{n}{distance} \PY{o}{=} \PY{n}{vq}\PY{p}{(}\PY{n}{des\PYZus{}list}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,}\PY{n}{voc}\PY{p}{)}
+             \PY{k}{for} \PY{n}{w} \PY{o+ow}{in} \PY{n}{words}\PY{p}{:}
+                 \PY{n}{test\PYZus{}features}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{[}\PY{n}{w}\PY{p}{]} \PY{o}{+}\PY{o}{=} \PY{l+m+mi}{1}
 \end{Verbatim}
 
 
-\begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}186}]:} ['Counterfeit', 'Counterfeit', 'genuine']
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}72}]:} \PY{c+c1}{\PYZsh{} Scale the features}
+         \PY{n}{test\PYZus{}features} \PY{o}{=} \PY{n}{stdSlr}\PY{o}{.}\PY{n}{transform}\PY{p}{(}\PY{n}{test\PYZus{}features}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} Perform the predictions}
+         \PY{n}{predictions} \PY{o}{=}  \PY{p}{[}\PY{n}{classes\PYZus{}names}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n}{clf}\PY{o}{.}\PY{n}{predict}\PY{p}{(}\PY{n}{test\PYZus{}features}\PY{p}{)}\PY{p}{]}
 \end{Verbatim}
-            
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}73}]:} \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{The original labels are:}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{y\PYZus{}label}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{The predicted labels are:}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{predictions}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+The original labels are:
+ ['Counterfeit', 'Counterfeit', 'Counterfeit', 'Counterfeit', 'genuine', 'genuine', 'genuine']
+The predicted labels are:
+ ['Counterfeit', 'Counterfeit', 'Counterfeit', 'Counterfeit', 'genuine', 'genuine', 'genuine']
+
+    \end{Verbatim}
+
+    \hypertarget{watermark-classifier-testing}{%
+\section{watermark classifier
+testing}\label{watermark-classifier-testing}}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}74}]:} \PY{n}{clf}\PY{p}{,} \PY{n}{classes\PYZus{}names}\PY{p}{,} \PY{n}{stdSlr}\PY{p}{,} \PY{n}{k}\PY{p}{,} \PY{n}{voc} \PY{o}{=} \PY{n}{joblib}\PY{o}{.}\PY{n}{load}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bof\PYZus{}watermark.p}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} Create feature extraction and keypoint detector objects}
+         \PY{n}{test\PYZus{}path} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Notes Watermark}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s2}{Notes Watermark}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s2}{dataset}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s2}{test}\PY{l+s+s2}{\PYZdq{}}
+         \PY{n}{testing\PYZus{}names} \PY{o}{=} \PY{n}{os}\PY{o}{.}\PY{n}{listdir}\PY{p}{(}\PY{n}{test\PYZus{}path}\PY{p}{)}
+         \PY{n}{image\PYZus{}paths} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+         \PY{n}{y\PYZus{}label} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+         
+         \PY{k}{for} \PY{n}{testing\PYZus{}name} \PY{o+ow}{in} \PY{n}{testing\PYZus{}names}\PY{p}{:}
+             \PY{n+nb}{dir} \PY{o}{=} \PY{n}{os}\PY{o}{.}\PY{n}{path}\PY{o}{.}\PY{n}{join}\PY{p}{(}\PY{n}{test\PYZus{}path}\PY{p}{,} \PY{n}{testing\PYZus{}name}\PY{p}{)}
+             \PY{n}{class\PYZus{}path} \PY{o}{=} \PY{n}{imlist}\PY{p}{(}\PY{n+nb}{dir}\PY{p}{)}
+             \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n}{class\PYZus{}path}\PY{p}{:}
+                 \PY{n}{y\PYZus{}label}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{testing\PYZus{}name}\PY{p}{)}
+             \PY{n}{image\PYZus{}paths}\PY{o}{+}\PY{o}{=}\PY{n}{class\PYZus{}path}
+         
+         \PY{n}{s} \PY{o}{=} \PY{n}{cv2}\PY{o}{.}\PY{n}{xfeatures2d}\PY{o}{.}\PY{n}{SIFT\PYZus{}create}\PY{p}{(}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} List where all the descriptors are stored}
+         \PY{n}{des\PYZus{}list} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+         
+         \PY{k}{for} \PY{n}{image\PYZus{}path} \PY{o+ow}{in} \PY{n}{image\PYZus{}paths}\PY{p}{:}
+             \PY{n}{im} \PY{o}{=} \PY{n}{cv2}\PY{o}{.}\PY{n}{imread}\PY{p}{(}\PY{n}{image\PYZus{}path}\PY{p}{)}
+             \PY{n}{gr}\PY{o}{=} \PY{n}{cv2}\PY{o}{.}\PY{n}{cvtColor}\PY{p}{(}\PY{n}{im}\PY{p}{,}\PY{n}{cv2}\PY{o}{.}\PY{n}{COLOR\PYZus{}RGB2GRAY}\PY{p}{)}
+             \PY{n}{h}\PY{p}{,}\PY{n}{w} \PY{o}{=} \PY{n}{gr}\PY{o}{.}\PY{n}{shape}
+             \PY{n}{num\PYZus{}w}\PY{o}{=}\PY{p}{(}\PY{n+nb}{int}\PY{p}{)}\PY{p}{(}\PY{n}{w}\PY{o}{/}\PY{l+m+mi}{4}\PY{p}{)}
+             \PY{n}{num\PYZus{}h}\PY{o}{=}\PY{p}{(}\PY{n+nb}{int}\PY{p}{)}\PY{p}{(}\PY{n}{h}\PY{o}{/}\PY{l+m+mi}{5}\PY{p}{)}
+             
+             \PY{n}{g} \PY{o}{=} \PY{n}{gr}\PY{p}{[}\PY{n}{num\PYZus{}h}\PY{p}{:}\PY{n}{h}\PY{o}{\PYZhy{}}\PY{n}{num\PYZus{}h}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{:}\PY{n}{num\PYZus{}w}\PY{p}{]}
+             \PY{n}{kp}\PY{p}{,} \PY{n}{des} \PY{o}{=} \PY{n}{s}\PY{o}{.}\PY{n}{detectAndCompute}\PY{p}{(}\PY{n}{g}\PY{p}{,} \PY{k+kc}{None}\PY{p}{)}
+             \PY{n}{des\PYZus{}list}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{p}{(}\PY{n}{image\PYZus{}path}\PY{p}{,} \PY{n}{des}\PY{p}{)}\PY{p}{)}   
+         
+         \PY{c+c1}{\PYZsh{} Stack all the descriptors vertically in a numpy array}
+         \PY{n}{descriptors} \PY{o}{=} \PY{n}{des\PYZus{}list}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}
+         \PY{k}{for} \PY{n}{image\PYZus{}path}\PY{p}{,} \PY{n}{descriptor} \PY{o+ow}{in} \PY{n}{des\PYZus{}list}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{:}\PY{p}{]}\PY{p}{:}
+             \PY{n}{descriptors} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{vstack}\PY{p}{(}\PY{p}{(}\PY{n}{descriptors}\PY{p}{,} \PY{n}{descriptor}\PY{p}{)}\PY{p}{)} 
+         
+         
+         \PY{n}{test\PYZus{}features} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{image\PYZus{}paths}\PY{p}{)}\PY{p}{,} \PY{n}{k}\PY{p}{)}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{float32}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{image\PYZus{}paths}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+             \PY{n}{words}\PY{p}{,} \PY{n}{distance} \PY{o}{=} \PY{n}{vq}\PY{p}{(}\PY{n}{des\PYZus{}list}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,}\PY{n}{voc}\PY{p}{)}
+             \PY{k}{for} \PY{n}{w} \PY{o+ow}{in} \PY{n}{words}\PY{p}{:}
+                 \PY{n}{test\PYZus{}features}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{[}\PY{n}{w}\PY{p}{]} \PY{o}{+}\PY{o}{=} \PY{l+m+mi}{1}
+         
+         \PY{c+c1}{\PYZsh{} Scale the features}
+         \PY{n}{test\PYZus{}features} \PY{o}{=} \PY{n}{stdSlr}\PY{o}{.}\PY{n}{transform}\PY{p}{(}\PY{n}{test\PYZus{}features}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} Perform the predictions}
+         \PY{n}{predictions} \PY{o}{=}  \PY{p}{[}\PY{n}{classes\PYZus{}names}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n}{clf}\PY{o}{.}\PY{n}{predict}\PY{p}{(}\PY{n}{test\PYZus{}features}\PY{p}{)}\PY{p}{]}
+         
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{The original labels are:}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{y\PYZus{}label}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{The predicted labels are:}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{predictions}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+The original labels are:
+ ['counterfeit', 'counterfeit', 'counterfeit', 'counterfeit', 'genuine', 'genuine']
+The predicted labels are:
+ ['counterfeit', 'counterfeit', 'counterfeit', 'counterfeit', 'genuine', 'genuine']
+
+    \end{Verbatim}
+
 
     % Add a bibliography block to the postdoc
     
